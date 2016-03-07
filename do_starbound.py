@@ -8,13 +8,16 @@ from datetime import datetime
 # Helper Functions #
 ####################
 
+
 def get_api_key():
 
     return raw_input("DigitalOcean API Key: ")
 
+
 def help_menu():
     print "Help Menu"
     exit()
+
 
 def backup_droplet(droplets, target_name, destroy=False):
 
@@ -28,13 +31,30 @@ def backup_droplet(droplets, target_name, destroy=False):
 
             if droplet.status != 'off':
                 print "Droplet {} Online, powering off.".format(droplet.name)
-                #droplet.power_off(return_dict=False).wait()
+                droplet.power_off(return_dict=False).wait()
 
             print "Attempting to Snapshot Droplet {} with an ID of {}".format(droplet.name, droplet.id)
-            #droplet.take_snapshot('{}_{}'.format(time_now, droplet.name), return_dict=False, power_off=False).wait()
+            droplet.take_snapshot('{}_{}'.format(time_now, droplet.name), return_dict=False, power_off=False).wait()
 
             if destroy:
-                print "Destroy"
+                droplet.destroy()
+
+
+def restore_droplet(
+        snapshot, keys, api_key, region='nyc1', 
+        size_slug='2gb', name='starbound-server', 
+        backups=False):
+
+    print "Pushing snapshot {} to a fresh droplet".format(snapshot)
+
+    droplet = digitalocean.Droplet(token=api_key,
+                                   name=name,
+                                   region=region,
+                                   image=snapshot,
+                                   size_slug=size_slug,
+                                   backups=backups)
+    droplet.create()
+    print "Droplet Created at {}".format(droplet.ip_address)
 
 
 ########
@@ -77,9 +97,22 @@ if __name__ == '__main__':
     while not api_key:
         api_key = get_api_key()
 
-    # Pull all Droplets into a list
+    # Get DigitalOcean Info
     manager = digitalocean.Manager(token=api_key)
+    ssh_keys = manager.get_all_sshkeys()
     droplets = manager.get_all_droplets()
+    snapshots = manager.get_my_images()
+    newest_snapshot = ''
+
+    # Get Newest Snapshot
+    for snapshot in snapshots:
+        if 'starbound-server' in snapshot.name:
+            if newest_snapshot == '' or newest_snapshot.created_at < snapshot.created_at:
+                newest_snapshot = snapshot
+
 
     if backup:
         backup_droplet(droplets, 'starbound-server', destroy)
+
+    if restore and newest_snapshot != '':
+        restore_droplet(newest_snapshot.id, ssh_keys, api_key)
