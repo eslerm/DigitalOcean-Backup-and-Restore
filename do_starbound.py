@@ -49,11 +49,20 @@ def restore_droplet(
 
     droplet = digitalocean.Droplet(token=api_key,
                                    name=name,
+                                   ssh_keys=keys,
                                    region=region,
                                    image=snapshot,
                                    size_slug=size_slug,
                                    backups=backups)
+
+    # Create the Droplet and wait for it to complete
     droplet.create()
+    action = digitalocean.Action(id=droplet.action_ids[0], token=droplet.token, droplet_id=droplet.id)
+    action.load()
+    action.wait()
+
+    created = droplet.load()
+
     print "Droplet Created at {}".format(droplet.ip_address)
 
 
