@@ -16,6 +16,26 @@ def help_menu():
     print "Help Menu"
     exit()
 
+def backup_droplet(droplets, target_name, destroy=False):
+
+    # Iterate over droplets, snapshotting all "target_name" droplets.
+
+    for droplet in droplets:
+
+        time_now = datetime.now().strftime("%Y-%m-%d--%H:%M:%S")
+
+        if droplet.name == target_name:
+
+            if droplet.status != 'off':
+                print "Droplet {} Online, powering off.".format(droplet.name)
+                #droplet.power_off(return_dict=False).wait()
+
+            print "Attempting to Snapshot Droplet {} with an ID of {}".format(droplet.name, droplet.id)
+            #droplet.take_snapshot('{}_{}'.format(time_now, droplet.name), return_dict=False, power_off=False).wait()
+
+            if destroy:
+                print "Destroy"
+
 
 ########
 # Main #
@@ -49,10 +69,9 @@ if __name__ == '__main__':
 
     # Show if attempting to run Backup and Restore options simultaneously
     if backup and restore or destroy and restore:
-        print "Nope"
+        print "These Arguments cannot be used together, please reference --help"
         exit()
-    exit()
-    
+
     # Set API Key
     api_key = os.getenv('DO_API_KEY')
     while not api_key:
@@ -62,16 +81,5 @@ if __name__ == '__main__':
     manager = digitalocean.Manager(token=api_key)
     droplets = manager.get_all_droplets()
 
-    # Iterate over droplets, snapshotting all "starbound-server" droplets.
-    for droplet in droplets:
-
-        time_now = datetime.now().strftime("%Y-%m-%d--%H:%M:%S")
-
-        if droplet.name == 'starbound-server':
-
-            if droplet.status != 'off':
-                print "Droplet {} Online, powering off.".format(droplet.name)
-                droplet.power_off(return_dict=False).wait()
-
-            print "Attempting to Snapshot Droplet {} with an ID of {}".format(droplet.name, droplet.id)
-            droplet.take_snapshot('{}_{}'.format(time_now, droplet.name), return_dict=False, power_off=False).wait()
+    if backup:
+        backup_droplet(droplets, 'starbound-server', destroy)
