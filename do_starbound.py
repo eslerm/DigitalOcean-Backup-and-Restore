@@ -30,8 +30,6 @@ if __name__ == '__main__':
     # Iterate over droplets, snapshotting all "starbound-server" droplets.
     for droplet in droplets:
 
-        pass
-
         time_now = datetime.now().strftime("%Y-%m-%d--%H:%M:%S")
 
         if droplet.name == 'starbound-server':
