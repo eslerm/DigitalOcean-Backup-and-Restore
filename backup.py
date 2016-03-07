@@ -27,8 +27,6 @@ if __name__ == '__main__':
     manager = digitalocean.Manager(token=api_key)
     droplets = manager.get_all_droplets()
 
-
-
     # Iterate over droplets, snapshotting all "starbound-server" droplets.
     for droplet in droplets:
 
