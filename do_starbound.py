@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import os
+import sys
 import digitalocean
 from datetime import datetime
 
@@ -11,6 +12,10 @@ def get_api_key():
 
     return raw_input("DigitalOcean API Key: ")
 
+def help_menu():
+    print "Help Menu"
+    exit()
+
 
 ########
 # Main #
@@ -18,6 +23,36 @@ def get_api_key():
 
 if __name__ == '__main__':
 
+    backup = False
+    destroy = False
+    restore = False
+
+    # Get CLI Options
+    for opt in sys.argv[1:]:
+
+        if opt in ("-b", "--backup"):
+            backup = True
+
+        elif opt in ("-d", "--destroy"):
+            destroy = True
+
+        elif opt in ("-r", "--restore"):
+            restore = True
+
+        elif opt in ("-h", "--help"):
+            help_menu()
+
+    # Show if no Arguments supplied
+    if not backup and not restore:
+        print "No Options selected, please run with --help to view all"
+        exit()
+
+    # Show if attempting to run Backup and Restore options simultaneously
+    if backup and restore or destroy and restore:
+        print "Nope"
+        exit()
+    exit()
+    
     # Set API Key
     api_key = os.getenv('DO_API_KEY')
     while not api_key:

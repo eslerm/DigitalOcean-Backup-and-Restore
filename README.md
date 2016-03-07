@@ -10,3 +10,18 @@ restore them when they are needed.
 In order to solve this, I'm leveraging DigitalOceans snapshots and destroying the server when the snapshot
 is complete. This will reduce my usage charges to what I actually use, and provide a versioned history 
 of the server should something go wrong.
+
+### Usage:
+
+It should be noted that this script only targets Droplets named `starbound-server`.
+
+* **Environment Variables:**
+  You may supply a DigitalOcean API Key at runtime or set it to an environment variable accessible to the script.
+  Something like `export DO_API_KEY=mykey` in `~/.bashrc` should allow the script to autoload the key for usage.
+
+* **Command line:**
+  There are currently 3 Command line options. `--backup`, `--destroy`, and `--restore`.
+  * `--backup`: Run the snapshot against the `starbound-server` Droplet.
+  * `--destroy`: This should be used along with `--backup`. If provided, 
+    the droplet will be destroyed after it is backed up (This provides the cost savings).
+  * `--restore`: Run this one on its own, functionality currently unfinished.
