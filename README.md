@@ -11,6 +11,7 @@ In order to solve this, I'm leveraging DigitalOceans snapshots and destroying th
 is complete. This will reduce my usage charges to what I actually use, and provide a versioned history 
 of the server should something go wrong.
 
+
 ### Usage:
 
 It should be noted that this script only targets Droplets named `starbound-server`.
@@ -24,4 +25,9 @@ It should be noted that this script only targets Droplets named `starbound-serve
   * `--backup`: Run the snapshot against the `starbound-server` Droplet.
   * `--destroy`: This should be used along with `--backup`. If provided, 
     the droplet will be destroyed after it is backed up (This provides the cost savings).
-  * `--restore`: Run this one on its own, functionality currently unfinished.
+  * `--restore`: Run this one on its own, It will use the latest starbound-server snapshot to 
+      create a new `starbound-server` droplet.
+
+
+### Dependencies:
+  * [Koalalorenzo's python-digitalocean](https://github.com/koalalorenzo/python-digitalocean)
