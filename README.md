@@ -1,4 +1,4 @@
-# [WIP] DigitalOcean Starbound Server Snapshot/Destroy and Restore.
+# DigitalOcean Starbound Server Snapshot/Destroy and Restore.
 
 **The Problem:**
 I only need the Starbound server to run *maybe* 8 hours a month. Paying $40 a month for 
