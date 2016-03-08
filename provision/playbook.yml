@@ -1,0 +1,9 @@
+---
+- hosts: all
+
+  tasks:
+  - name: Update apt-cache and install python-pip
+    apt: name=python-pip state=present update_cache=yes
+
+  - name: Install requirements.txt
+    shell: pip install -r /vagrant/requirements.txt
