@@ -15,7 +15,30 @@ def get_api_key():
 
 
 def help_menu():
-    print "Help Menu"
+    print """
+    At this time, no additional parameters for the following are 
+    taken.
+    
+    ======
+    Backup
+    ======
+
+    --backup
+        This will create a snapshot of all starbound-server droplets.
+
+    --destroy
+        This will destroy the Droplet after the snapshot is taken.
+        This is the primary cost-savings measure.
+
+    =======
+    Restore
+    =======
+
+    --restore
+        This will create a new Droplet named 'starbound-server' from the 
+        snapshot taken previously. By default it will be located in NYC1,
+        use all SSH Keys associated with your account, and be a 2GB instance.
+    """
     exit()
 
 
