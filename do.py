@@ -126,7 +126,6 @@ if __name__ == '__main__':
     do_id = os.getenv('DO_ID')
     while not do_id:
         do_id = get_do_id()
-    print("do_id: "+do_id)
 
     # Set API Key
     api_key = os.getenv('DO_API_KEY')
