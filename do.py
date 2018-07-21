@@ -80,8 +80,7 @@ def restore_droplet(
                                    image=snapshot,
                                    size_slug=size_slug,
                                    backups=backups)
-    print(droplet.name)
-    print("foo do_id:"+do_id+" "+str(type(do_id)))
+
     # Create the Droplet and wait for it to complete
     droplet.create()
     action = digitalocean.Action(id=droplet.action_ids[0], token=droplet.token, droplet_id=droplet.id)
